@@ -25,7 +25,7 @@ export class Review{
     @ManyToOne(()=>User, (user: User)=>user.userId)
     reveiwerId: string
 
-    @Column()
+    @Column({type:"timestamp", default:()=>"CURRENT_TIMESTAMP"})
     dateCreated: Date
 
 }
