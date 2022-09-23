@@ -26,4 +26,10 @@ export class Apartment{
     @Column()
     numberOfRooms: number
 
+    @Column()
+    details: string
+
+    @Column({type:"boolean"})
+    isApartmentVerified: false
+
 }
