@@ -5,7 +5,7 @@ import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 export class User{
 
   @PrimaryGeneratedColumn("uuid")
-  userId: string
+  id: string
 
   @Column()
   firstName: string
@@ -26,10 +26,8 @@ export class User{
   @Column()
   password: string
 
-  @Column({
-    type:"boolean"
-  })
-  isEmailVerified: false
+  @Column({default: false})
+  isEmailVerified: boolean
 
   @Column({type:"timestamp", default:()=>"CURRENT_TIMESTAMP"})
   dateCreated: Date 

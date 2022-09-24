@@ -1,35 +1,32 @@
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { Review } from "./review.entity";
-import { User } from "./user.entity";
 
 @Entity()
 export class Apartment{
     
     @PrimaryGeneratedColumn("uuid")
-    apartmentId: string
+    id: string
 
     @Column()
     address: string
 
     @Column()
-    images: string
+    imagesLink: string
 
-    @ManyToOne(()=>Review, (review: Review)=>review.reviewId)
+    @OneToMany(()=>Review, (review: Review)=>review.id)
+    @JoinColumn()
     reviewsId: Review[]
-
-    @ManyToOne(()=>User, (user : User)=>user.userId)
-    reviewersId: User[]
 
     @Column({type:"timestamp", default:()=>"CURRENT_TIMESTAMP"})
     dateCreated: Date
 
     @Column()
-    numberOfRooms: number
-
-    @Column()
     details: string
 
-    @Column({type:"boolean"})
-    isApartmentVerified: false
+    @Column({default: false})
+    isApartmentVerified: boolean
+
+    @Column()
+    landlordId: string
 
 }
