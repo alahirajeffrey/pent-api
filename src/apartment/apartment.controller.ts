@@ -5,8 +5,6 @@ import { ApartmentService } from './apartment.service';
 import { CreateApartmentDto } from './dto/create-apartment.dto';
 import { UpdateApartmentDetailsDto } from './dto/update-apartment-details.dto';
 
-@UseGuards(AuthGuard('jwt'))
-@ApiHeader({name: "Authorization"})
 @ApiTags("Apartment")
 @Controller('apartment')
 export class ApartmentController {
@@ -14,6 +12,8 @@ export class ApartmentController {
         private readonly apartmentService: ApartmentService
     ){}
 
+    @UseGuards(AuthGuard('jwt'))
+    @ApiHeader({name: "Authorization"})
     @Post()
     createApartment(
         @Body() dto: CreateApartmentDto
@@ -21,6 +21,8 @@ export class ApartmentController {
         return this.apartmentService.createApartment(dto)
     }
 
+    @UseGuards(AuthGuard('jwt'))
+    @ApiHeader({name: "Authorization"})
     @Patch('/:apartmentId/:landlordId')
     updateApartment(
         @Param('apartmentId') apartmentId: string,
@@ -30,6 +32,7 @@ export class ApartmentController {
         return this.apartmentService.updateApartment(apartmentId, landlordId, dto)
     }
     
+
     @Get('/:apartmentId')
     showSingleApartment(
         @Param('apartmentId') apartmentId: string
@@ -42,6 +45,8 @@ export class ApartmentController {
         return this.apartmentService.showAllApartments()
     }
 
+    @UseGuards(AuthGuard('jwt'))
+    @ApiHeader({name: "Authorization"})
     @Delete('/:apartmentId/:landlordId')
     removeApartment(
         @Param('apartmentId') apartmentId: string,
