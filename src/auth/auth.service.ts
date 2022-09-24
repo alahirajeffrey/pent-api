@@ -88,10 +88,16 @@ export class AuthService {
             }
 
             //return token
-            return await this.signToken(userExists.userId, userExists.email)
+            return await this.signToken(userExists.id, userExists.email)
 
         }catch(error) {
             throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR)
         }
     }
+
+    // send verification to user email
+    async sendVerificationEmail(){}
+
+    // verify user email
+    async verifyEmail(){}
 }

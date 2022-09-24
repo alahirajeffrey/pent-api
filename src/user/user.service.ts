@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/entities/user.entity';
 import { Repository } from 'typeorm';
 import { UpdateUserDto } from './dto';
+import { UpdateUserTypeDto } from './dto/update-user-type.dto';
 
 @Injectable()
 export class UserService {
@@ -12,10 +13,10 @@ export class UserService {
     ){}
 
     // update user details
-    async updateUser(userId: string, dto: UpdateUserDto){
+    async updateUserProfile(userId: string, dto: UpdateUserDto){
         try{
             //update user
-            const updateduser = await this.userRepo.update({userId : userId}, dto)
+            const updateduser = await this.userRepo.update({id : userId}, dto)
             if(!updateduser){
                 throw new HttpException("user not updated", HttpStatus.INTERNAL_SERVER_ERROR)
             }
@@ -32,11 +33,27 @@ export class UserService {
     async getUser(userId: string){
         try{
             // find user details
-            const user = await this.userRepo.findOne({where:{userId : userId}})
+            const user = await this.userRepo.findOne({where:{id : userId}})
 
             //return user
             delete user.password
             return user
+        }catch(error){
+            throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR)
+        }
+    }
+
+    async updateUserType(userId: string, dto: UpdateUserTypeDto){
+        try{
+            //update user
+            const updatedRole = await this.userRepo.update(userId, dto)
+            if(!updatedRole){
+                throw new HttpException("user type not updated", HttpStatus.INTERNAL_SERVER_ERROR)
+            }
+
+            //return updated user
+            return {message:"user type updated"}
+
         }catch(error){
             throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR)
         }

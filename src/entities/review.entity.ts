@@ -5,7 +5,7 @@ import { User } from "./user.entity";
 @Entity()
 export class Review{
     @PrimaryGeneratedColumn("uuid")
-    reviewId: string
+    id: string
     
     @Column()
     review: string
@@ -19,10 +19,10 @@ export class Review{
     @Column()
     landlordReview: string
 
-    @OneToOne(()=>Apartment, (apartment: Apartment)=> apartment.apartmentId)
+    @OneToOne(()=>Apartment, (apartment: Apartment)=> apartment.id)
     apartmentId: string
 
-    @ManyToOne(()=>User, (user: User)=>user.userId)
+    @ManyToOne(()=>User, (user: User)=>user.id)
     reveiwerId: string
 
     @Column({type:"timestamp", default:()=>"CURRENT_TIMESTAMP"})
