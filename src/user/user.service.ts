@@ -16,7 +16,7 @@ export class UserService {
     async updateUserProfile(userId: string, dto: UpdateUserDto){
         try{
             //update user
-            const updateduser = await this.userRepo.update({userId : userId}, dto)
+            const updateduser = await this.userRepo.update({id : userId}, dto)
             if(!updateduser){
                 throw new HttpException("user not updated", HttpStatus.INTERNAL_SERVER_ERROR)
             }
@@ -33,7 +33,7 @@ export class UserService {
     async getUser(userId: string){
         try{
             // find user details
-            const user = await this.userRepo.findOne({where:{userId : userId}})
+            const user = await this.userRepo.findOne({where:{id : userId}})
 
             //return user
             delete user.password
