@@ -13,7 +13,7 @@ export class Apartment{
     @Column()
     imagesLink: string
 
-    @Column({nullable: true})
+    @Column("text",{nullable: true, array:true})
     reviewsId: String[]
 
     @Column()
