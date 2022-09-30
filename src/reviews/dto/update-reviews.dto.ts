@@ -1,7 +1,7 @@
 import { ApiProperty } from "@nestjs/swagger"
 import { IsString } from "class-validator"
 
-export class CreateReviewsDto {
+export class UpdateReviewDto {
     @ApiProperty()
     @IsString()
     apartmentReview: string 
@@ -17,12 +17,4 @@ export class CreateReviewsDto {
     @ApiProperty()
     @IsString()
     landlordReview: string
-
-    @ApiProperty()
-    @IsString()
-    apartmentId: string
-
-    @ApiProperty()
-    @IsString()
-    reviewerId: string
 }
