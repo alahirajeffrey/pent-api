@@ -13,12 +13,8 @@ export class Apartment{
     @Column()
     imagesLink: string
 
-    @OneToMany(()=>Review, (review: Review)=>review.id)
-    @JoinColumn()
-    reviewsId: Review[]
-
-    @Column({type:"timestamp", default:()=>"CURRENT_TIMESTAMP"})
-    dateCreated: Date
+    @Column("text",{nullable: true, array:true})
+    reviewsId: String[]
 
     @Column()
     details: string
@@ -29,4 +25,6 @@ export class Apartment{
     @Column()
     landlordId: string
 
+    @Column({type:"timestamp", default:()=>"CURRENT_TIMESTAMP"})
+    dateCreated: Date
 }
