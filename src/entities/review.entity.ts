@@ -1,4 +1,4 @@
-import { Column, Entity, ManyToOne, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, ManyToMany, ManyToOne, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Apartment } from "./apartment.entity";
 import { User } from "./user.entity";
 
@@ -7,23 +7,23 @@ export class Review{
     @PrimaryGeneratedColumn("uuid")
     id: string
     
-    @Column()
-    review: string
+    @Column({nullable: false})
+    apartmentReview: string
 
-    @Column()
+    @Column({nullable: true})
     environmentReview: string
 
-    @Column()
+    @Column({nullable: true})
     amenitiesReview: string
 
-    @Column()
+    @Column({nullable: true})
     landlordReview: string
 
-    @OneToOne(()=>Apartment, (apartment: Apartment)=> apartment.id)
+    @Column({nullable: false})
     apartmentId: string
 
-    @ManyToOne(()=>User, (user: User)=>user.id)
-    reveiwerId: string
+    @Column({nullable: false})
+    reviewerId: string
 
     @Column({type:"timestamp", default:()=>"CURRENT_TIMESTAMP"})
     dateCreated: Date
