@@ -6,6 +6,10 @@ import { LoginDto, RegisterDto } from './dto';
 import * as argon2 from "argon2";
 import { JwtService } from '@nestjs/jwt'
 import { ConfigService } from '@nestjs/config';
+import { ChangePasswordDto } from './dto/change-password.dto';
+import { EmailVerificationService } from 'src/email-verification/email-verification.service';
+import { VerificationMailDto } from './dto/verification-mail.dto';
+import { VerifyUserDto } from './dto/verify-user.dto';
 
 @Injectable()
 export class AuthService {
@@ -13,8 +17,14 @@ export class AuthService {
         @InjectRepository(User)
         private userRepo : Repository<User>,
         private jwt: JwtService,
-        private config: ConfigService
+        private config: ConfigService,
+        private emailService : EmailVerificationService
     ){}
+
+    // generate random otp 
+    generateOtp(): string{
+        return Math.floor(Math.random() * 899999 + 10000).toString()
+    }
 
     // function to create access tokens when user logs in
     async signToken(userId : string, email: string) : Promise<Object>{
@@ -75,6 +85,27 @@ export class AuthService {
         }
     }
 
+    async changePassword(dto : ChangePasswordDto){
+        try {
+            //check to see if user exists
+            const userExists = await this.checkUserDoesNotExist(dto.email)
+            
+            // check to see if password matches
+            const passwordMatches = await argon2.verify(userExists.password, dto.oldPassword)
+            if(!passwordMatches){
+                throw new HttpException("incorrect password", HttpStatus.FORBIDDEN)
+            }
+
+            //update password
+            const newPasswordHash = await argon2.hash(dto.newPassword)
+            await this.userRepo.update(userExists.id, {password: newPasswordHash})
+
+            return {message: "Password changed"}
+        } catch (error) {
+            throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR)
+        }
+    }
+
     //function to log a user in
     async login(dto : LoginDto){   
         try {
@@ -96,8 +127,43 @@ export class AuthService {
     }
 
     // send verification to user email
-    async sendVerificationEmail(){}
+    async sendVerificationEmail(dto: VerificationMailDto, userId: string){
+        try {
+            //generate otp
+            const otp = this.generateOtp()
+
+            //send otp to verify email
+            this.emailService.sendMail({
+                to: dto.recipient,
+                subject: dto.subject,
+                text: `Your OTP : ${otp}`
+            })
+
+            await this.userRepo.update(userId,{otp: otp})
+
+            return {message: "Verification mail sent"}
+        } catch (error) {
+            throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR)
+        } 
+    }
 
     // verify user email
-    async verifyEmail(){}
+    async verifyEmail(dto: VerifyUserDto){
+        try {
+            //check user otp
+            const userExists = await this.checkUserDoesNotExist(dto.email)
+            if(userExists.otp !== dto.otp){
+                throw new HttpException("Incorrect otp", HttpStatus.FORBIDDEN)   
+            }
+
+            // verify user
+            await this.userRepo.update(userExists.id, {isEmailVerified: true})
+            //delete otp
+            await this.userRepo.update(userExists.id, {otp:null})
+            return {message: 'User verified'}
+            
+        } catch (error) {
+            throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR)
+        }
+    }
 }
