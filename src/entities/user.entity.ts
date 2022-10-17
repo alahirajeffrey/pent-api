@@ -23,6 +23,9 @@ export class User{
   })
   type : UserType
 
+  @Column({nullable: true})
+  otp: string
+
   @Column()
   password: string
 
