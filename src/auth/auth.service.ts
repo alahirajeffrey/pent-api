@@ -16,6 +16,11 @@ export class AuthService {
         private config: ConfigService
     ){}
 
+    // generate random otp 
+    generateOtp(): String{
+        return Math.floor(Math.random() * 899999 + 10000).toString()
+    }
+
     // function to create access tokens when user logs in
     async signToken(userId : string, email: string) : Promise<Object>{
         const payload = {
