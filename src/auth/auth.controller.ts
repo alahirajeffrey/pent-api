@@ -1,5 +1,6 @@
-import { Body, Controller, Param, Post } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { Body, Controller, Param, Post, UseGuards } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
+import { ApiHeader, ApiTags } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
 import { LoginDto, RegisterDto } from './dto';
 import { ChangePasswordDto } from './dto/change-password.dto';
@@ -23,6 +24,8 @@ export class AuthController {
         return this.authService.login(loginDto)
     }
 
+    @UseGuards(AuthGuard('jwt'))
+    @ApiHeader({name: "Authorization"})
     @Post('password-change')
     changePassword(
         @Body() dto: ChangePasswordDto
@@ -30,6 +33,8 @@ export class AuthController {
         return this.authService.changePassword(dto)
     }
 
+    @UseGuards(AuthGuard('jwt'))
+    @ApiHeader({name: "Authorization"})
     @Post('send-verification-mail/:userId')
     sendVerificationMail(
         @Body() dto: VerificationMailDto,
@@ -38,6 +43,8 @@ export class AuthController {
         return this.authService.sendVerificationEmail(dto, userId)
     }
 
+    @UseGuards(AuthGuard('jwt'))
+    @ApiHeader({name: "Authorization"})
     @Post('send-verification-mail')
     verifyEmail(
         @Body('') dto: VerifyUserDto
