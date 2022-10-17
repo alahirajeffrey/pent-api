@@ -6,6 +6,7 @@ import { LoginDto, RegisterDto } from './dto';
 import * as argon2 from "argon2";
 import { JwtService } from '@nestjs/jwt'
 import { ConfigService } from '@nestjs/config';
+import { ChangePasswordDto } from './dto/change-password.dto';
 
 @Injectable()
 export class AuthService {
@@ -76,6 +77,25 @@ export class AuthService {
             return newUser
 
         }catch(error){
+            throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR)
+        }
+    }
+
+    async changePassword(dto : ChangePasswordDto){
+        try {
+            //check to see if user exists
+            const userExists = await this.checkUserDoesNotExist(dto.email)
+            
+            // check to see if password matches
+            const passwordMatches = await argon2.verify(userExists.password, dto.oldPassword)
+            if(!passwordMatches){
+                throw new HttpException("incorrect password", HttpStatus.FORBIDDEN)
+            }
+
+            //update password
+            const newPasswordHash = await argon2.hash(dto.newPassword)
+            await this.userRepo.update(userExists.id, {password: newPasswordHash})
+        } catch (error) {
             throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR)
         }
     }
