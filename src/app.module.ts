@@ -6,6 +6,7 @@ import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
 import { ApartmentModule } from './apartment/apartment.module';
 import { ReviewsModule } from './reviews/reviews.module';
+import { EmailVerificationModule } from './email-verification/email-verification.module';
 
 @Module({
   imports: [ConfigModule.forRoot({isGlobal:true}),
@@ -13,7 +14,8 @@ import { ReviewsModule } from './reviews/reviews.module';
     AuthModule,
     UserModule,
     ApartmentModule,
-    ReviewsModule],
+    ReviewsModule,
+    EmailVerificationModule],
   controllers: [],
   providers: [],
 })
