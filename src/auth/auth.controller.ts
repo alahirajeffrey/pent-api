@@ -1,8 +1,10 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Param, Post } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
 import { LoginDto, RegisterDto } from './dto';
 import { ChangePasswordDto } from './dto/change-password.dto';
+import { VerificationMailDto } from './dto/verification-mail.dto';
+import { VerifyUserDto } from './dto/verify-user.dto';
 
 @ApiTags("Auth")
 @Controller('auth')
@@ -21,11 +23,25 @@ export class AuthController {
         return this.authService.login(loginDto)
     }
 
-    @Post('passwordChange')
+    @Post('password-change')
     changePassword(
         @Body() dto: ChangePasswordDto
     ){
-        this.authService.changePassword(dto)
-    return {message: "Password changed"}
+        return this.authService.changePassword(dto)
+    }
+
+    @Post('send-verification-mail/:userId')
+    sendVerificationMail(
+        @Body() dto: VerificationMailDto,
+        @Param('userId') userId: string
+    ){
+        return this.authService.sendVerificationEmail(dto, userId)
+    }
+
+    @Post('send-verification-mail')
+    verifyEmail(
+        @Body('') dto: VerifyUserDto
+    ){
+        return this.authService.verifyEmail(dto)
     }
 }
