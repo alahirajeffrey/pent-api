@@ -1,5 +1,5 @@
 ## Project Description
-Backend for Pent which is a hypothetical platform that allows users to post reviews about apartment they have previously lived in as well as reviews about the location, environment and landlords etc. Users can then view these reviews and use to decide to purchase the apartment or not.
+Pent is a hypothetical platform that allows users to post reviews about apartment they have previously lived in as well as reviews about the location, environment and landlords etc. Users can then view these reviews and use to decide to purchase the apartment or not.
 
 
 ## Features
