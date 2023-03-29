@@ -1,37 +1,36 @@
-import { UserType } from "src/common/enums/user-type.enum";
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { UserType } from '../common/enums/user-type.enum';
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
-export class User{
-
-  @PrimaryGeneratedColumn("uuid")
-  id: string
-
-  @Column()
-  firstName: string
+export class User {
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
   @Column()
-  lastName: string
+  firstName: string;
 
   @Column()
-  email: string
+  lastName: string;
+
+  @Column()
+  email: string;
 
   @Column({
-    type: "enum",
+    type: 'enum',
     enum: UserType,
-    default: UserType.TENANT
+    default: UserType.TENANT,
   })
-  type : UserType
+  type: UserType;
 
-  @Column({nullable: true})
-  otp: string
+  @Column({ nullable: true })
+  otp: string;
 
   @Column()
-  password: string
+  password: string;
 
-  @Column({default: false})
-  isEmailVerified: boolean
+  @Column({ default: false })
+  isEmailVerified: boolean;
 
-  @Column({type:"timestamp", default:()=>"CURRENT_TIMESTAMP"})
-  dateCreated: Date 
+  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+  dateCreated: Date;
 }
