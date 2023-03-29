@@ -23,6 +23,8 @@ describe('ReviewsController', () => {
       controllers: [ReviewsController],
       providers: [ReviewsService, UserService],
     })
+      .overrideGuard(AuthGuard())
+      .useValue({ canActivate: () => true })
       .overrideProvider(ReviewsService)
       .useValue(mockReviewsService)
       .overrideProvider(UserService)
