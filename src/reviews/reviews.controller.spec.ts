@@ -48,13 +48,13 @@ describe('ReviewsController', () => {
       landlordReview: 'good',
     };
 
-    it('should call the createReview service', async () => {
-      expect(await controller.addReview(dto)).toHaveBeenCalled();
-      expect(await controller.addReview(dto)).toHaveBeenCalledWith(dto);
+    it('should call the createReview service', () => {
+      expect(controller.addReview(dto)).toHaveBeenCalled();
+      expect(controller.addReview(dto)).toHaveBeenCalledWith(dto);
     });
 
-    it('should return return an object', async () => {
-      expect(await controller.addReview(dto)).toEqual({});
+    it('should return return an object', () => {
+      expect(controller.addReview(dto)).toEqual({});
     });
   });
 
