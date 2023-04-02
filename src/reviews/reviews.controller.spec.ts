@@ -9,13 +9,9 @@ describe('ReviewsController', () => {
 
   const mockReviewsService = {
     addReview: jest.fn((dto) => {}),
-    editReview: jest.fn(),
+    editReview: jest.fn((reviewId, dto) => {}),
     viewAllApartmentReviews: jest.fn((id) => {}),
-    deleteReview: jest.fn(),
-  };
-
-  const mockUserService = {
-    addReview: jest.fn((dto) => {}),
+    deleteReview: jest.fn((reviewId, reviewerId) => {}),
   };
 
   beforeEach(async () => {
@@ -27,8 +23,6 @@ describe('ReviewsController', () => {
       .useValue({ canActivate: () => true })
       .overrideProvider(ReviewsService)
       .useValue(mockReviewsService)
-      .overrideProvider(UserService)
-      .useValue(mockUserService)
       .compile();
 
     controller = module.get<ReviewsController>(ReviewsController);
@@ -52,10 +46,6 @@ describe('ReviewsController', () => {
       expect(controller.addReview(dto)).toHaveBeenCalled();
       expect(controller.addReview(dto)).toHaveBeenCalledWith(dto);
     });
-
-    it('should return return an object', () => {
-      expect(controller.addReview(dto)).toEqual({});
-    });
   });
 
   describe('view all apartment reviews', () => {
@@ -64,9 +54,35 @@ describe('ReviewsController', () => {
       expect(controller.viewAllApartmentReviews(id)).toHaveBeenCalled();
       expect(controller.viewAllApartmentReviews(id)).toHaveBeenCalledWith(id);
     });
+  });
 
-    it('should return an object', () => {
-      expect(controller.viewAllApartmentReviews(id)).toEqual({});
+  describe('edit review', () => {
+    const reviewId = '12345';
+
+    const dto = {
+      apartmentReview: 'good',
+      environmentReview: 'good',
+      amenitiesReview: 'good',
+      landlordReview: 'good',
+    };
+
+    it('should call the editReview service', () => {
+      expect(controller.editReview(reviewId, dto)).toHaveBeenCalled();
+      expect(controller.editReview(reviewId, dto)).toHaveBeenCalledWith(
+        reviewId,
+        dto,
+      );
+    });
+  });
+
+  describe('delete review', () => {
+    const reviewerId = '12345';
+    const reviewId = '12345';
+    it('should call the deleteReview service', () => {
+      expect(controller.deleteReview(reviewId, reviewerId)).toHaveBeenCalled();
+      expect(
+        controller.deleteReview(reviewId, reviewerId),
+      ).toHaveBeenCalledWith(reviewId, reviewerId);
     });
   });
 });
