@@ -29,16 +29,6 @@ describe('AuthController', () => {
     expect(controller).toBeDefined();
   });
 
-  // it('registerUser service to be defined', () => {
-  //   const dto = {
-  //     email: 'email@email.com',
-  //     password: 'password',
-  //     firstName: 'first',
-  //     lastName: 'second',
-  //   };
-  //   expect(controller.register(dto)).toBeDefined();
-  // });
-
   describe('register user', () => {
     const dto = {
       email: 'email@email.com',
